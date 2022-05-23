@@ -1,6 +1,7 @@
 # Yolov5app
 git clone
 
-conda activate yolov5
+<code>pip install -r requirements.txt<code/>
+
 
 streamlit run app.py
