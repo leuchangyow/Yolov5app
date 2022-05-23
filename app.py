@@ -141,10 +141,11 @@ if __name__ == '__main__':
                 st.text(f'The results of your inference will be located at {dp}')
                 imag_show=Image.open(dp+'/exp/'+upload_file.name)
                 st.image(imag_show)
-                shutil.rmtree(tmp)          
+                          
                 st.snow()
             else:
-                pass    
+                pass
+        shutil.rmtree(tmp)
     else:
         pass
 
