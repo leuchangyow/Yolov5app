@@ -1,5 +1,5 @@
 # Yolov5app
-git clone
+git clone this repo
 
 
 
