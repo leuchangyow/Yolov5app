@@ -23,9 +23,9 @@ if not os.path.exists(det): os.mkdir(det)
 
 if __name__ == '__main__':
     @st.cache
-    def parse_opt(file_path,des_path,b):
+    def parse_opt(file_path,des_path, b, model):
         parser = argparse.ArgumentParser()
-        parser.add_argument('--weights', nargs='+', type=str, default=ROOT / 'ROI_detection.pt', help='model path(s)')
+        parser.add_argument('--weights', nargs='+', type=str, default=ROOT / str(model), help='model path(s)')
         parser.add_argument('--source', type=str, default=ROOT / file_path, help='file/dir/URL/glob, 0 for webcam')
         parser.add_argument('--data', type=str, default=ROOT / 'data/coco128.yaml', help='(optional) dataset.yaml path')
         parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[640], help='inference size h,w')
@@ -46,7 +46,7 @@ if __name__ == '__main__':
         parser.add_argument('--project', default=ROOT / des_path, help='save results to project/name')
         parser.add_argument('--name', default='exp', help='save results to project/name')
         parser.add_argument('--exist-ok', action=b, help='existing project/name ok, do not increment')
-        parser.add_argument('--line-thickness', default=3, type=int, help='bounding box thickness (pixels)')
+        parser.add_argument('--line-thickness', default=2, type=int, help='bounding box thickness (pixels)')
         parser.add_argument('--hide-labels', default=False, action='store_true', help='hide labels')
         parser.add_argument('--hide-conf', default=False, action='store_true', help='hide confidences')
         parser.add_argument('--half', action='store_true', help='use FP16 half-precision inference')
@@ -63,8 +63,13 @@ if __name__ == '__main__':
         layout="wide",
         initial_sidebar_state="expanded",
     )
+   
+    st.title('Yolov5 Roi and Defect area detection') 
+    st.subheader('How to use?')
+    st.write('1. Select input (single image or all images in a folder)')
+    st.write('2. Select which area you want to detect (ROI or Defect)')
 
-    st.title('Yolov5 Roi and Defect area detection')
+    
     
     source = ('Single image', 'All images in a folder')
     source_index = st.sidebar.selectbox(
@@ -73,6 +78,13 @@ if __name__ == '__main__':
         format_func = lambda x : source[x],
         help = 'select single image or a folder'
     )
+    model = ('ROI', 'Defect')
+    model_index = st.sidebar.selectbox(
+        label = 'Select model detection', 
+        options = range(len(model)), 
+        format_func = lambda x : model[x]
+    )
+    model_dict = {0:'ROI.pt', 1:'Defect.pt'}
 
     if source_index == 0:
         upload_file = st.sidebar.file_uploader(
@@ -117,9 +129,8 @@ if __name__ == '__main__':
             if not p.exists:
                 p.mkdir()
             if st.button('Start detection:'):
-
                 try:
-                    main(parse_opt(fp,dp,'store_true'))
+                    main(parse_opt(fp,dp,'store_true', model_dict[model_index]))
                     st.success('Detection complete')
                     st.text(f'The results of your inference will be located at {dp}')
                     st.text('Go and check it out!')
@@ -136,7 +147,7 @@ if __name__ == '__main__':
             if not p.exists:
                 p.mkdir()
             if st.button('Start detection'):
-                main(parse_opt(tmp+upload_file.name,dp,'store_false'))
+                main(parse_opt(tmp+upload_file.name,dp,'store_false', model_dict[model_index]))
                 st.success('Detection complete')
                 st.text(f'The results of your inference will be located at {dp}')
                 imag_show=Image.open(dp+'/exp/'+upload_file.name)
