@@ -1,6 +1,10 @@
 # Yolov5app
 git clone
 
-conda activate yolov5
 
-streamlit run app.py
+
+<code>conda activate Yolov5</code>
+
+
+<code>streamlit run app.py</code>
+
