@@ -1,11 +1,11 @@
 # Yolov5app
-git clone this repo
+1.git clone this repo and cd into it
 
-<code>conda create -n yolov5app python=3.9</code>
+2.<code>conda create -n yolov5app python=3.9</code>
 
-<code>conda activate yolov5app</code>
+3.<code>conda activate yolov5app</code>
 
-<code>pip install -r requirements_env.txt</code>
+4.<code>pip install -r requirements_env.txt</code>
 
-<code>streamlit run app.py</code>
+5.<code>streamlit run app.py</code>
 
